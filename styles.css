@@ -1,0 +1,84 @@
+.document-outline {
+	position: absolute;
+	top: 50%;
+	left: var(--size-4-2);
+	transform: translateY(-50%);
+	z-index: var(--layer-cover);
+	max-height: calc(100% - var(--size-4-12));
+	display: flex;
+	flex-direction: column;
+}
+
+.document-outline.is-empty {
+	display: none;
+}
+
+/* Collapsed state: a column of lines */
+.document-outline-lines {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--size-4-2);
+	padding: var(--size-4-2);
+	max-height: 100%;
+	overflow: hidden;
+}
+
+.document-outline-line {
+	height: var(--border-width);
+	min-height: 2px;
+	width: calc(var(--size-4-3) - (var(--outline-depth, 0) * var(--size-2-1)));
+	border-radius: var(--radius-s);
+	background-color: var(--text-faint);
+}
+
+.document-outline-line.is-active {
+	background-color: var(--text-normal);
+}
+
+/* Expanded state: a floating card */
+.document-outline-panel {
+	display: none;
+	flex-direction: column;
+	padding: var(--size-4-2);
+	min-width: var(--size-4-12);
+	max-width: calc(var(--size-4-18) * 4);
+	max-height: 100%;
+	overflow-y: auto;
+	background-color: var(--background-primary);
+	border: var(--border-width) solid var(--background-modifier-border);
+	border-radius: var(--radius-m);
+	box-shadow: var(--shadow-s);
+}
+
+.document-outline:hover .document-outline-lines,
+.document-outline:has(:focus-visible) .document-outline-lines {
+	display: none;
+}
+
+.document-outline:hover .document-outline-panel,
+.document-outline:has(:focus-visible) .document-outline-panel {
+	display: flex;
+}
+
+.document-outline-item {
+	flex: 0 0 auto;
+	padding: var(--size-2-2) var(--size-4-2);
+	padding-left: calc(var(--size-4-2) + (var(--outline-depth, 0) * var(--size-4-4)));
+	border-radius: var(--radius-s);
+	font-size: var(--font-ui-small);
+	color: var(--text-muted);
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	cursor: var(--cursor);
+}
+
+.document-outline-item:hover {
+	background-color: var(--background-modifier-hover);
+	color: var(--text-normal);
+}
+
+.document-outline-item.is-active {
+	color: var(--text-normal);
+}
