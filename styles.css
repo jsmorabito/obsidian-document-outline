@@ -52,12 +52,12 @@
 }
 
 .document-outline:hover .document-outline-lines,
-.document-outline:has(:focus-visible) .document-outline-lines {
+.document-outline.is-keyboard-focus .document-outline-lines {
 	display: none;
 }
 
 .document-outline:hover .document-outline-panel,
-.document-outline:has(:focus-visible) .document-outline-panel {
+.document-outline.is-keyboard-focus .document-outline-panel {
 	display: flex;
 }
 

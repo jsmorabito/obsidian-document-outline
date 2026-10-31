@@ -20,6 +20,18 @@ class OutlineComponent {
 		this.containerEl = view.contentEl.createDiv({ cls: CLS });
 		this.linesEl = this.containerEl.createDiv({ cls: `${CLS}-lines` });
 		this.panelEl = this.containerEl.createDiv({ cls: `${CLS}-panel` });
+
+		// Keep the card open while tabbing through it, but not after a mouse click.
+		this.containerEl.addEventListener('focusin', (evt) => {
+			const target = evt.target as HTMLElement;
+			this.containerEl.toggleClass(
+				'is-keyboard-focus',
+				target.matches(':focus-visible'),
+			);
+		});
+		this.containerEl.addEventListener('focusout', () => {
+			this.containerEl.removeClass('is-keyboard-focus');
+		});
 	}
 
 	destroy() {
