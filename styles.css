@@ -1,12 +1,18 @@
+/*
+ * The wrapper spans the pane's height so the lines and the card can both be
+ * centered vertically and capped to the pane. It ignores the pointer itself;
+ * only the lines and the (visible) card receive hover.
+ */
 .document-outline {
 	position: absolute;
-	top: 50%;
+	top: 0;
+	bottom: 0;
 	left: var(--size-4-2);
-	transform: translateY(-50%);
 	z-index: var(--layer-cover);
-	max-height: calc(100% - var(--size-4-12));
 	display: flex;
-	flex-direction: column;
+	align-items: center;
+	padding-block: var(--size-4-6);
+	pointer-events: none;
 }
 
 .document-outline.is-empty {
@@ -22,6 +28,8 @@
 	padding: var(--size-4-2);
 	max-height: 100%;
 	overflow: hidden;
+	pointer-events: auto;
+	transition: opacity var(--anim-duration-fast) var(--anim-motion-smooth);
 }
 
 .document-outline-line {
@@ -30,35 +38,50 @@
 	width: calc(var(--size-4-3) - (var(--outline-depth, 0) * var(--size-2-1)));
 	border-radius: var(--radius-s);
 	background-color: var(--text-faint);
+	transition: background-color var(--anim-duration-fast) var(--anim-motion-smooth);
 }
 
 .document-outline-line.is-active {
 	background-color: var(--text-normal);
 }
 
-/* Expanded state: a floating card */
+/* Expanded state: a floating card, cross-faded with the lines */
 .document-outline-panel {
-	display: none;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	display: flex;
 	flex-direction: column;
 	padding: var(--size-4-2);
 	min-width: var(--size-4-12);
 	max-width: calc(var(--size-4-18) * 4);
-	max-height: 100%;
+	max-height: calc(100% - var(--size-4-12));
 	overflow-y: auto;
 	background-color: var(--background-primary);
 	border: var(--border-width) solid var(--background-modifier-border);
 	border-radius: var(--radius-m);
 	box-shadow: var(--shadow-s);
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translate(calc(-1 * var(--size-4-2)), -50%);
+	transition:
+		opacity var(--anim-duration-fast) var(--anim-motion-smooth),
+		transform var(--anim-duration-fast) var(--anim-motion-smooth),
+		visibility var(--anim-duration-fast) var(--anim-motion-smooth);
 }
 
 .document-outline:hover .document-outline-lines,
 .document-outline.is-keyboard-focus .document-outline-lines {
-	display: none;
+	opacity: 0;
 }
 
 .document-outline:hover .document-outline-panel,
 .document-outline.is-keyboard-focus .document-outline-panel {
-	display: flex;
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translate(0, -50%);
 }
 
 .document-outline-item {
@@ -72,6 +95,9 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 	cursor: var(--cursor);
+	transition:
+		background-color var(--anim-duration-fast) var(--anim-motion-smooth),
+		color var(--anim-duration-fast) var(--anim-motion-smooth);
 }
 
 .document-outline-item:hover {
@@ -81,4 +107,11 @@
 
 .document-outline-item.is-active {
 	color: var(--text-normal);
+}
+
+/* Applied to the note's scroller only while navigating from the outline */
+@media (prefers-reduced-motion: no-preference) {
+	.document-outline-smooth-scroll {
+		scroll-behavior: smooth;
+	}
 }

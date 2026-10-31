@@ -6,6 +6,8 @@ import {
 } from 'obsidian';
 
 const CLS = 'document-outline';
+const SMOOTH_SCROLL_CLS = `${CLS}-smooth-scroll`;
+const SMOOTH_SCROLL_MS = 600;
 
 class OutlineComponent {
 	private containerEl: HTMLElement;
@@ -15,6 +17,8 @@ class OutlineComponent {
 	private itemEls: HTMLElement[] = [];
 	private lineEls: HTMLElement[] = [];
 	private activeIndex = -1;
+	private smoothTimer = 0;
+	private smoothScroller: HTMLElement | null = null;
 
 	constructor(private view: MarkdownView) {
 		this.containerEl = view.contentEl.createDiv({ cls: CLS });
@@ -35,6 +39,7 @@ class OutlineComponent {
 	}
 
 	destroy() {
+		this.endSmoothScroll();
 		this.containerEl.remove();
 	}
 
@@ -82,7 +87,26 @@ class OutlineComponent {
 	private navigate(heading: HeadingCache) {
 		// applyScroll puts the line at the top of the pane without the flash
 		// highlight that setEphemeralState({ line }) adds.
+		const scroller = this.view.contentEl.querySelector<HTMLElement>(
+			this.view.getMode() === 'source'
+				? '.cm-scroller'
+				: '.markdown-preview-view',
+		);
+		this.endSmoothScroll();
+		this.smoothScroller = scroller;
+		scroller?.addClass(SMOOTH_SCROLL_CLS);
 		this.view.currentMode.applyScroll(heading.position.start.line);
+
+		this.smoothTimer = window.setTimeout(
+			() => this.endSmoothScroll(),
+			SMOOTH_SCROLL_MS,
+		);
+	}
+
+	private endSmoothScroll() {
+		window.clearTimeout(this.smoothTimer);
+		this.smoothScroller?.removeClass(SMOOTH_SCROLL_CLS);
+		this.smoothScroller = null;
 	}
 
 	/** Highlights the last heading at or above the top of the visible area. */
