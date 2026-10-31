@@ -165,7 +165,11 @@ export default class DocumentOutlinePlugin extends Plugin {
 	private refreshAll() {
 		const current = new Set<MarkdownView>();
 		this.app.workspace.iterateAllLeaves((leaf) => {
-			if (leaf.view instanceof MarkdownView) current.add(leaf.view);
+			if (!(leaf.view instanceof MarkdownView)) return;
+			const root = leaf.getRoot();
+			const { leftSplit, rightSplit } = this.app.workspace;
+			if (root === leftSplit || root === rightSplit) return;
+			current.add(leaf.view);
 		});
 
 		for (const view of this.views) {
