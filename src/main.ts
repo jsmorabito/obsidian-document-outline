@@ -80,8 +80,9 @@ class OutlineComponent {
 	}
 
 	private navigate(heading: HeadingCache) {
-		const line = heading.position.start.line;
-		this.view.setEphemeralState({ line, scroll: line });
+		// applyScroll puts the line at the top of the pane without the flash
+		// highlight that setEphemeralState({ line }) adds.
+		this.view.currentMode.applyScroll(heading.position.start.line);
 	}
 
 	/** Highlights the last heading at or above the top of the visible area. */
