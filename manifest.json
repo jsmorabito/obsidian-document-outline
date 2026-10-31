@@ -1,7 +1,7 @@
 {
 	"id": "document-outline",
 	"name": "Document Outline",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"minAppVersion": "1.4.0",
 	"description": "A minimal, hover-to-expand outline of your note's headings, shown beside the document.",
 	"author": "John Morabito",

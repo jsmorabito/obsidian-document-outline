@@ -1,6 +1,6 @@
 {
 	"name": "document-outline",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A hover-to-expand outline of headings beside the document.",
 	"main": "main.js",
 	"type": "module",
